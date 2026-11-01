@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Q&amp;A War Room · Kamalistaan · Team Manthan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;600;700&display=swap">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:#120F16;overflow:hidden}
+#fit{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{position:relative;width:1920px;height:1080px;flex:none;background:#F6F1E7;color:#1D1A21;font-family:'DM Sans','Inter','DejaVu Sans',Arial,sans-serif;padding:72px 110px 90px;display:flex;flex-direction:column;gap:30px;transform-origin:50% 50%}
+.serif{font-family:'Playfair Display','DejaVu Serif',Georgia,serif}
+.eyebrow{font-size:26px;letter-spacing:6px;text-transform:uppercase;color:#8C5A0B;font-weight:700}
+h1{font-size:64px;font-weight:600;line-height:1.1}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;flex:1}
+.tile{background:#FFFCF6;border:2px solid #E2D6C0;border-radius:20px;padding:28px 30px;display:flex;gap:22px;align-items:center;cursor:pointer}
+.tile:hover{border-color:#7B1E2C}
+.num{flex:none;width:76px;height:76px;border-radius:50%;background:#7B1E2C;color:#F6F1E7;font-size:40px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.tile p{font-size:34px;font-weight:600;line-height:1.25}
+.qrow{display:flex;gap:26px;align-items:center}
+.q{font-size:52px;font-weight:600;line-height:1.15}
+.ans{font-size:46px;font-weight:700;line-height:1.2;color:#7B1E2C}
+.vis{flex:1;display:flex;gap:40px;align-items:stretch;min-height:0}
+.proof{font-size:34px;line-height:1.35;color:#3F3934;border-left:8px solid #D9A54A;padding:6px 0 6px 24px}
+.foot{position:absolute;left:110px;right:110px;bottom:30px;display:flex;justify-content:space-between;font-size:24px;color:#57504A}
+.big{display:flex;flex-direction:column;gap:6px;background:#FFFCF6;border:2px solid #E2D6C0;border-radius:18px;padding:26px 30px;flex:1;justify-content:center}
+.big b{font-family:'Playfair Display','DejaVu Serif',Georgia,serif;font-size:58px;white-space:nowrap;line-height:1;color:#1D1A21}
+.big span{font-size:30px;color:#57504A;line-height:1.3}
+.hbar{display:grid;grid-template-columns:460px 1fr 170px;gap:20px;align-items:center;font-size:34px}
+.hbar .t{height:62px;background:#EFE8DA;border-radius:8px;overflow:hidden}
+.hbar .f{height:100%;border-radius:8px}
+.hbar .v{font-weight:700;font-size:38px;text-align:right}
+table{border-collapse:collapse;font-size:38px;width:100%}
+th,td{padding:16px 22px;border-bottom:2px solid #E2D6C0;text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#57504A}
+tr.hl td{background:#F3DCDC;font-weight:700}
+.list{display:flex;flex-direction:column;gap:18px;flex:1}
+.li{display:flex;gap:18px;align-items:flex-start;font-size:36px;line-height:1.3;background:#FFFCF6;border:2px solid #E2D6C0;border-radius:16px;padding:18px 24px}
+.li .dot{flex:none;width:18px;height:18px;border-radius:50%;background:#D9A54A;margin-top:14px}
+.col{flex:1;display:flex;flex-direction:column;gap:14px;background:#FFFCF6;border:2px solid #E2D6C0;border-radius:18px;padding:26px 30px}
+.col h3{font-size:30px;letter-spacing:4px;text-transform:uppercase;color:#8C5A0B}
+.col p{font-size:34px;line-height:1.3}
+</style>
+</head>
+<body><div id="fit"><div id="stage"></div></div>
+<script>
+const Q=[
+{q:"Why not take Orion’s ₹2,100 Cr?",a:"Only ₹1,200 Cr of it is certain. After risk it is worth ₹1,607 Cr, below our ₹1,869 Cr.",v:'water',p:"Bad case (Orion stock halves, remake flops): ₹1,320 Cr, less than a plain land sale at ₹1,460 Cr. And the family gives up the name."},
+{q:"Will developers pay the same price for 10 acres?",a:"Maybe not, and we still come first.",v:'land',p:"Pro rata to the ₹1,500 Cr offer is ₹100 Cr an acre. At ₹80 Cr an acre, a 20% discount, our plan is still worth ₹1,669 Cr."},
+{q:"Is the tech pivot too risky for a family new to tech?",a:"The downside is capped by design.",v:'risk',p:"Below 63% of plan by year 3, we sell the last 5 acres: a ₹500 Cr floor at today’s price."},
+{q:"Why not keep all 15 acres and wait?",a:"Waiting has a price: ₹105 Cr a year of safe income given up.",v:'wait',p:"That is 7% on ₹1,500 Cr, while the studio is already losing ₹15 Cr a year (FY 2024-25)."},
+{q:"Why is 12% the right discount rate?",a:"It is a fair rate for a risky Indian media business, and our ranking holds from 10% to 16%.",v:'rate',p:"Same model as the deck and simulator; only the discount rate changes. ₹ Cr, value today."},
+{q:"Isn’t 8× profit an aggressive valuation?",a:"It is moderate, applied to every option, and we stay first even at 6×.",v:'mult',p:"The multiple values the businesses at year 5; land and Orion’s offer do not depend on it. ₹ Cr, value today."},
+{q:"Why would Orion accept being a customer?",a:"It gets what it said it wants, without paying for land it does not need.",v:'orion',p:"Exhibit 4: Orion’s intent is “to secure a permanent production base and a library of proven IP in India.”"},
+{q:"What about taxes?",a:"All figures are pre-tax and treated the same way for every option.",v:'tax',p:"Capital gains tax would weigh more on the options that sell more land: a full sale or Orion sell 15 acres; we sell 10."},
+{q:"What happens to Kamal Amrohi’s legacy?",a:"It stays with the family, and reaches a wider audience.",v:'legacy',p:"Of the five options, only ours keeps both the legacy and the highest value."}
+];
+const fmt=n=>n.toLocaleString('en-IN');
+function hb(rows,max){return `<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:26px">${rows.map(([l,v,c,b])=>`<div class="hbar"><span style="${b?'font-weight:700;color:#7B1E2C':''}">${l}</span><div class="t"><div class="f" style="width:${(v/max*100).toFixed(1)}%;background:${c}"></div></div><span class="v" style="color:${b?'#7B1E2C':'#1D1A21'}">${fmt(v)}</span></div>`).join('')}</div>`;}
+function water(){const S=380/2100;const cols=[['Headline offer',0,2100,'#B9AFA2'],['Stock vests over 3 years',2020,2100,'#7B1E2C'],['Earnout odds and timing',1647,2020,'#7B1E2C'],['Debt repaid',1607,1647,'#7B1E2C'],['Risk-adjusted value',0,1607,'#D9A54A']];
+ const lab=[ '2,100','−80','−373','−40','1,607'];
+ let h=`<div style="flex:1;position:relative">`;
+ [[1869,'Our plan 1,869','#7B1E2C'],[1460,'Full sale 1,460','#57504A']].forEach(([v,t,c])=>{h+=`<div style="position:absolute;left:0;right:0;bottom:${(80+v*S).toFixed(0)}px;border-top:4px dashed ${c}"></div><p style="position:absolute;right:0;bottom:${(88+v*S).toFixed(0)}px;font-size:30px;font-weight:700;color:${c}">${t}</p>`;});
+ cols.forEach(([n,a,b,c],i)=>{const left=i*300+20;h+=`<div style="position:absolute;left:${left}px;width:220px;bottom:${(80+a*S).toFixed(0)}px;height:${((b-a)*S).toFixed(0)}px;background:${c};border-radius:6px"></div><p style="position:absolute;left:${left-20}px;width:260px;bottom:${(90+b*S).toFixed(0)}px;text-align:center;font-size:38px;font-weight:700">${lab[i]}</p><p style="position:absolute;left:${left-30}px;width:280px;bottom:0;height:72px;text-align:center;font-size:26px;line-height:1.2;color:#57504A">${n}</p>`;});
+ return h+`</div>`;}
+const V={
+water,
+land:()=>hb([['Our plan, ₹100 Cr/acre',1869,'#7B1E2C',1],['Our plan, ₹80 Cr/acre',1669,'#A4505B',1],['Orion, risk-adjusted',1607,'#B9AFA2'],['Sell all 15 acres',1460,'#B9AFA2']],1869),
+risk:()=>`<div class="big" style="flex:.8;align-items:center;text-align:center"><b style="font-size:150px;color:#7B1E2C">63%</b><span>of plan is all we need to beat a full sale</span></div><div class="list">${['An experienced integrator builds the stages','Orion’s booking fills Volume 1 from day one','Volume 2 waits for Gate 2: Volume 1 at 60% booked for two quarters','The last 5 acres stay as a ₹500 Cr floor'].map(t=>`<div class="li"><span class="dot"></span><span>${t}</span></div>`).join('')}</div>`,
+wait:()=>[['₹105 Cr','a year: 7% risk-free on ₹1,500 Cr'],['₹28.8 lakh','a day'],['≈ ₹2,000','a minute, while we talk'],['₹7 Cr','a year for every idle acre']].map(([b,s])=>`<div class="big"><b>${b}</b><span>${s}</span></div>`).join(''),
+rate:()=>`<table><tr><th>Discount rate</th><th>Our plan</th><th>Orion</th><th>Full sale</th></tr>${[['10%',1989,1628,1460],['12% (deck)',1869,1607,1460],['14%',1761,1588,1460],['16%',1663,1570,1460]].map(r=>`<tr class="${r[0].startsWith('12')?'hl':''}"><td>${r[0]}</td><td>${fmt(r[1])}</td><td>${fmt(r[2])}</td><td>${fmt(r[3])}</td></tr>`).join('')}</table>`,
+mult:()=>`<table><tr><th>Year-5 multiple</th><th>Our plan</th><th>Orion</th><th>Full sale</th></tr>${[['6×',1679,1607,1460],['8× (deck)',1869,1607,1460],['10×',2059,1607,1460]].map(r=>`<tr class="${r[0].startsWith('8')?'hl':''}"><td>${r[0]}</td><td>${fmt(r[1])}</td><td>${fmt(r[2])}</td><td>${fmt(r[3])}</td></tr>`).join('')}</table>`,
+orion:()=>`<div class="col"><h3>Orion gets</h3><p>A multi-year booking of LED Volume 1</p><p>The <i>Pakeezah</i> remake licence, on royalties</p><p>Streaming rights to the library</p></div><div class="col"><h3>Orion avoids</h3><p>₹1,200 Cr of upfront cash</p><p>₹400 Cr of its own stock</p><p>Running 15 acres of Mumbai land</p></div><div class="col"><h3>Orion does not get</h3><p>The land</p><p>The Kamalistaan brand</p><p>Control of the studio</p></div>`,
+tax:()=>`<div class="list">${['Every value in the deck is pre-tax, so the comparison is like for like','Selling land triggers capital gains tax','A full sale or Orion’s deal transfers all 15 acres; our plan sells 10','So taxes would widen our lead, not close it'].map(t=>`<div class="li"><span class="dot"></span><span>${t}</span></div>`).join('')}</div>`,
+legacy:()=>`<div class="list">${['The Kamalistaan name stays with the family','All 12 Kamal Amrohi films stay family-owned','The 1958 gates and the studio stand: a museum behind them','The <i>Pakeezah</i> remake licence takes the film to a global audience, on our terms'].map(t=>`<div class="li"><span class="dot"></span><span>${t}</span></div>`).join('')}</div>`
+};
+const st=document.getElementById('stage');let cur=0;
+function home(){cur=0;st.innerHTML=`<p class="eyebrow">Team Manthan · Kamalistaan · Bonus features</p><h1 class="serif">Q&amp;A war room: press a number</h1><div class="grid">${Q.map((x,i)=>`<div class="tile" data-i="${i+1}"><div class="num">${i+1}</div><p>${x.q}</p></div>`).join('')}</div><div class="foot"><span>Keys 1–9 open an answer · 0 or Esc returns here · ← → previous / next</span><span>All figures from the deck’s model (A1)</span></div>`;
+ st.querySelectorAll('.tile').forEach(t=>t.onclick=()=>show(+t.dataset.i));}
+function show(n){cur=n;const x=Q[n-1];st.innerHTML=`<div class="qrow"><div class="num">${n}</div><p class="q serif">${x.q}</p></div><p class="ans">${x.a}</p><div class="vis">${V[x.v]()}</div><p class="proof">${x.p}</p><div class="foot"><span>0 or Esc: all questions · ← → previous / next</span><span>${n} / 9</span></div>`;}
+addEventListener('keydown',e=>{if(e.key>='1'&&e.key<='9')show(+e.key);else if(e.key==='0'||e.key==='Escape')home();else if(e.key==='ArrowRight')show(cur>=9?1:cur+1);else if(e.key==='ArrowLeft')show(cur<=1?9:cur-1);else return;e.preventDefault();});
+addEventListener('click',e=>{if(cur&&!e.target.closest('.tile'))home();});
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);st.style.transform=`scale(${s})`;}
+fit();addEventListener('resize',fit);
+const h=location.hash.replace('#','');if(/^[1-9]$/.test(h))show(+h);else home();
+window.show=show;window.home=home;
+</script></body></html>
