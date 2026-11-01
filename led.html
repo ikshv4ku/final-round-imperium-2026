@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kamalistaan LED Volume · Team Manthan</title>
+<meta name="description" content="Tilt your phone to see how camera tracking makes an LED wall look real: the technology behind Kamalistaan 2.0.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=DM+Sans:wght@400;600;700&display=swap">
+<style>
+:root{--ink:#120F16;--cream:#F6F1E7;--gold:#D9A54A;--maroon:#7B1E2C;--muted:#CFC6B8}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--ink);color:var(--cream);font-family:'DM Sans',Arial,sans-serif;overflow:hidden;-webkit-user-select:none;user-select:none;touch-action:none}
+.top{position:fixed;left:0;right:0;top:0;padding:calc(14px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));z-index:5;background:linear-gradient(#120F16ee,#120F1600)}
+.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:0}
+h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(22px,4.4vw,40px);line-height:1.1;margin:4px 0 0;font-weight:600}
+h1 i{color:var(--gold)}
+#stage{position:fixed;inset:0;overflow:hidden}
+.layer{position:absolute;left:-12%;top:-8%;width:124%;height:116%;will-change:transform}
+.layer svg{width:100%;height:100%;display:block}
+#actor{position:absolute;left:50%;bottom:16%;width:min(26vw,190px);transform:translateX(-50%);z-index:3;filter:drop-shadow(0 18px 18px rgba(0,0,0,.55))}
+.floor{position:absolute;left:0;right:0;bottom:0;height:18%;background:linear-gradient(#1a141c,#0b090d);z-index:2;border-top:2px solid #D9A54A55}
+.tag{position:absolute;z-index:4;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:#120F16cc;border:1px solid #D9A54A88;color:var(--gold);white-space:nowrap}
+#tagWall{left:max(16px,4%);top:30%}
+#tagActor{left:50%;bottom:calc(16% + min(52vw,380px));transform:translateX(-50%)}
+.panel{position:fixed;left:0;right:0;bottom:0;z-index:6;padding:12px max(16px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:linear-gradient(#120F1600,#120F16f2 30%)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+button{font:700 14px 'DM Sans',Arial,sans-serif;border-radius:999px;padding:10px 16px;border:1px solid var(--gold);background:transparent;color:var(--cream);cursor:pointer}
+button.on{background:var(--gold);color:var(--ink)}
+#hint{font-size:13.5px;color:var(--muted);margin:8px 0 0;line-height:1.4;max-width:720px}
+#hint b{color:var(--cream)}
+#cam{position:fixed;right:max(16px,env(safe-area-inset-right,0px));top:calc(84px + env(safe-area-inset-top,0px));z-index:5;width:96px;height:64px;border:1px solid #D9A54A66;border-radius:10px;background:#120F16aa}
+#cam i{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--gold);left:42px;top:26px;box-shadow:0 0 10px var(--gold)}
+#cam span{position:absolute;left:0;right:0;bottom:-18px;text-align:center;font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+</style>
+</head>
+<body>
+<div id="stage">
+<div class="layer" id="L0"><svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B1420"/><stop offset=".55" stop-color="#7A3B2A"/><stop offset="1" stop-color="#D9A54A"/></linearGradient><radialGradient id="moon" cx=".72" cy=".22" r=".2"><stop offset="0" stop-color="#F6E7C4"/><stop offset="1" stop-color="#F6E7C4" stop-opacity="0"/></radialGradient></defs><rect width="1200" height="800" fill="url(#sky)"/><rect width="1200" height="800" fill="url(#moon)"/><circle cx="864" cy="176" r="38" fill="#F6E7C4"/></svg></div>
+<div class="layer" id="L1"><svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice"><g fill="#3A1C24"><rect x="380" y="430" width="440" height="260"/><path d="M450 430 Q600 250 750 430Z"/><circle cx="600" cy="300" r="18"/><rect x="370" y="330" width="34" height="360"/><path d="M370 330 L387 270 L404 330Z"/><rect x="796" y="330" width="34" height="360"/><path d="M796 330 L813 270 L830 330Z"/><path d="M300 520 Q340 450 380 520Z"/><rect x="300" y="520" width="80" height="170"/><path d="M820 520 Q860 450 900 520Z"/><rect x="820" y="520" width="80" height="170"/></g><rect x="0" y="680" width="1200" height="120" fill="#2A141B"/></svg></div>
+<div class="layer" id="L2"><svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" id="arcSvg"></svg></div>
+</div>
+<div class="floor"></div>
+<svg id="actor" viewBox="0 0 120 300" aria-label="Actor silhouette"><g fill="#0B090D"><circle cx="60" cy="36" r="24"/><path d="M28 72 Q60 58 92 72 L104 170 L88 172 L84 120 L82 300 L64 300 L60 196 L56 300 L38 300 L36 120 L32 172 L16 170Z"/></g><path d="M60 60 Q20 140 30 290 L90 290 Q100 140 60 60Z" fill="#7B1E2C" opacity=".85"/></svg>
+<div class="tag" id="tagWall">LED wall · Unreal Engine 5</div>
+<div class="tag" id="tagActor">Real actor</div>
+<div id="cam" aria-hidden="true"><i id="camDot"></i><span>Camera</span></div>
+<div class="top"><p class="eyebrow">Team Manthan · Kamalistaan 2.0 · LED Volume 1</p><h1>Tilt your phone. <i>This is camera tracking.</i></h1></div>
+<div class="panel">
+<div class="row">
+<button id="btnTrack" class="on">Tracking: ON</button>
+<button id="btnMotion">Enable tilt</button>
+</div>
+<p id="hint">With tracking <b>on</b>, the wall redraws the palace from the camera’s viewpoint, so near arches move more than the distant palace and the actor looks truly <b>inside</b> the set. Turn it <b>off</b> and the wall becomes a flat painting. This is what Kamalistaan’s retrofitted soundstages will sell to Orion and others.</p>
+</div>
+<script>
+(function(){
+// near layer: arcade of Mughal arches framing the scene
+const svg=document.getElementById('arcSvg');
+const arch=(x0,x1,yb,ys,ya)=>{const xc=(x0+x1)/2,w=x1-x0;return `M${x0},${yb} L${x0},${ys} C${x0},${ys-(ys-ya)*.55} ${xc-w*.22},${ya+(ys-ya)*.18} ${xc},${ya} C${xc+w*.22},${ya+(ys-ya)*.18} ${x1},${ys-(ys-ya)*.55} ${x1},${ys} L${x1},${yb}`;};
+function build(){
+ const r=(innerWidth*1.24)/(innerHeight*1.16), vis=Math.min(1200,800*r), x0=600-vis/2+vis*0.08, x1=600+vis/2-vis*0.08;
+ let fill='<g fill="#120F16">'+`<rect x="-200" y="0" width="${x0+200}" height="800"/><rect x="${x1}" y="0" width="${1400-x1}" height="800"/>`+'<rect x="0" y="0" width="1200" height="70"/></g>';
+ let px='';for(let x=0;x<1200;x+=22)for(let y=0;y<70;y+=22){px+=`<rect x="${x}" y="${y}" width="15" height="15" rx="2" fill="#D9A54A" fill-opacity="${(0.08+((x*7+y*13)%37)/37*0.35).toFixed(2)}"/>`;}
+ const t=(x1-x0)*0.035;
+ svg.innerHTML=fill+px+`<g fill="none" stroke="#D9A54A" stroke-width="5"><path d="${arch(x0,x1,800,330,90)}" stroke-opacity=".9"/><path d="${arch(x0+t,x1-t,800,350,130)}" stroke-opacity=".5"/></g>`;
+}
+build();addEventListener('resize',build);
+const L=[document.getElementById('L0'),document.getElementById('L1'),document.getElementById('L2')];
+const depth=[0.15,0.45,1.0]; // far moves least
+let tracking=true, tx=0, ty=0, cx=0, cy=0, motionOn=false, base=null;
+const camDot=document.getElementById('camDot');
+function setTarget(x,y){tx=Math.max(-1,Math.min(1,x));ty=Math.max(-1,Math.min(1,y));}
+function frame(){cx+=(tx-cx)*0.12;cy+=(ty-cy)*0.12;
+ const ax=tracking?cx:0, ay=tracking?cy:0;
+ L.forEach((el,i)=>{const d=depth[i];el.style.transform=`translate3d(${(-ax*d*7).toFixed(2)}%,${(-ay*d*4).toFixed(2)}%,0)`;});
+ camDot.style.left=(42+cx*36)+'px';camDot.style.top=(26+cy*20)+'px';
+ requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+// pointer fallback (desktop mouse, touch drag)
+window.addEventListener('pointermove',e=>{if(motionOn)return;setTarget((e.clientX/innerWidth-.5)*2,(e.clientY/innerHeight-.5)*2);},{passive:true});
+// idle sway until user interacts
+let interacted=false,t0=performance.now();
+(function sway(){if(!interacted&&!motionOn){const t=(performance.now()-t0)/1000;setTarget(Math.sin(t*0.7)*0.8,Math.sin(t*0.5)*0.3);}requestAnimationFrame(sway);})();
+window.addEventListener('pointerdown',()=>interacted=true);window.addEventListener('pointermove',()=>interacted=true,{once:true});
+// device orientation
+function onOri(e){if(e.gamma==null)return;if(!base)base={g:e.gamma,b:e.beta};interacted=true;
+ setTarget((e.gamma-base.g)/25,(e.beta-base.b)/25);}
+const btnM=document.getElementById('btnMotion');
+btnM.addEventListener('click',async()=>{
+ try{if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){const r=await DeviceOrientationEvent.requestPermission();if(r!=='granted'){btnM.textContent='Tilt blocked: drag instead';return;}}
+  if(!('DeviceOrientationEvent' in window)){btnM.textContent='No tilt sensor: drag instead';return;}
+  window.addEventListener('deviceorientation',onOri);motionOn=true;base=null;btnM.textContent='Tilt on · tap to re-centre';btnM.classList.add('on');
+  btnM.onclick=()=>{base=null;};
+ }catch(err){btnM.textContent='Tilt unavailable: drag instead';}
+});
+const btnT=document.getElementById('btnTrack');
+btnT.addEventListener('click',()=>{tracking=!tracking;btnT.textContent='Tracking: '+(tracking?'ON':'OFF');btnT.classList.toggle('on',tracking);});
+})();
+</script>
+</body>
+</html>
