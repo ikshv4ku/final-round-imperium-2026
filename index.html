@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kamalistaan Path Simulator · Team Manthan</title>
+<meta name="description" content="Test the five paths for Kamalistaan Studio: sell, tech pivot, brand leverage, Orion's offer, or Team Manthan's sell-10-keep-5 plan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500..800;1,500..700&family=DM+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#F6F1E7;--card:#FFFCF6;--line:#E2D6C0;--ink:#1D1A21;--muted:#57504A;--maroon:#7B1E2C;--maroon-pale:#F3DCDC;--gold:#D9A54A;--gold-ink:#8C5A0B;--grey:#B9AFA2;--warn:#9A3412}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',Arial,sans-serif;font-size:16px;line-height:1.5}
+.hero{background:linear-gradient(100deg,#120F16 0%,#1D1A21 55%,#2B1420 100%);color:#F6F1E7;padding:36px max(20px,env(safe-area-inset-left,0px)) 32px;position:relative;overflow:hidden}
+.hero .pix{position:absolute;right:-40px;top:0;bottom:0;width:46%;opacity:.55;pointer-events:none}
+.wrap{max-width:1240px;margin:0 auto;position:relative}
+.eyebrow{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600;margin:0 0 10px}
+h1{font-family:'Playfair Display',Georgia,serif;font-weight:600;font-size:clamp(32px,5vw,54px);line-height:1.05;margin:0 0 12px;text-wrap:balance}
+h1 i{color:var(--gold)}
+.hero p.sub{max-width:640px;color:#CFC6B8;margin:0;font-size:17px}
+main{padding:28px max(16px,env(safe-area-inset-left,0px)) 48px}
+.grid{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+.controls{position:sticky;top:16px;display:flex;flex-direction:column;gap:18px}
+@media (max-width:900px){.controls{position:static}}
+.controls h2,.results h2{font-family:'Playfair Display',Georgia,serif;font-size:22px;margin:0 0 4px;font-weight:600}
+.group{display:flex;flex-direction:column;gap:14px;padding-top:14px;border-top:1px solid var(--line)}
+.group:first-of-type{border-top:none;padding-top:0}
+.gtitle{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink);font-weight:700;margin:0}
+.ctl label{display:flex;justify-content:space-between;gap:8px;font-size:14px;font-weight:600}
+.ctl label output{font-variant-numeric:tabular-nums;color:var(--maroon);font-weight:700;white-space:nowrap}
+.ctl small{display:block;color:var(--muted);font-size:12.5px;line-height:1.35;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--maroon);margin:6px 0 0}
+.checks{display:flex;flex-direction:column;gap:8px}
+.checks label{display:flex;gap:10px;align-items:flex-start;font-size:14px;font-weight:600;cursor:pointer}
+.checks input{accent-color:var(--maroon);width:18px;height:18px;margin-top:2px}
+.checks span small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.presets{display:flex;flex-wrap:wrap;gap:8px}
+.presets button{font:600 13px 'DM Sans',Arial,sans-serif;border:1px solid var(--ink);background:transparent;color:var(--ink);border-radius:999px;padding:7px 14px;cursor:pointer}
+.presets button:hover,.presets button.on{background:var(--ink);color:#F6F1E7}
+.results{display:flex;flex-direction:column;gap:20px;min-width:0}
+.verdict{background:var(--ink);color:#F6F1E7;border-radius:16px;padding:20px 24px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.verdict .tag{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.verdict .big{font-family:'Playfair Display',Georgia,serif;font-size:clamp(22px,3vw,30px);font-weight:600;line-height:1.2}
+.verdict .note{color:#CFC6B8;font-size:15px}
+.warn{background:#FDECEC;border:1px solid #F3B8B8;color:var(--warn);border-radius:12px;padding:10px 14px;font-size:14px;font-weight:600}
+.bars{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.bar{display:grid;grid-template-columns:170px 1fr 84px;gap:12px;align-items:center;font-size:15px}
+@media (max-width:520px){.bar{grid-template-columns:110px 1fr 64px;font-size:13px}}
+.bar .track{height:30px;background:#EFE8DA;border-radius:6px;overflow:hidden}
+.bar .fill{height:100%;background:var(--grey);border-radius:6px;transition:width .35s ease}
+.bar.win .fill{background:var(--maroon)}
+.bar.win .name,.bar.win .val{color:var(--maroon);font-weight:700}
+.bar .val{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.kpi .k{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.kpi .v{font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:4px}
+.kpi .d{font-size:13px;color:var(--muted);line-height:1.35}
+.chartwrap{overflow-x:auto}
+svg text{font-family:'DM Sans',Arial,sans-serif}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13.5px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:22px;height:3px;vertical-align:middle;margin-right:6px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:760px){.split{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+th.n,td.n{text-align:right;font-variant-numeric:tabular-nums}
+footer{max-width:1240px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left,0px)) 40px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<header class="hero">
+<svg class="pix" viewBox="0 0 400 300" preserveAspectRatio="xMaxYMid slice" aria-hidden="true" id="pix"></svg>
+<div class="wrap">
+<p class="eyebrow">Team Manthan · The Kamalistaan Conundrum</p>
+<h1>Kamalistaan Path Simulator<br><i>sell the surplus, keep the soul</i></h1>
+<p class="sub">Move the sliders to stress-test the four paths in the case against our plan: sell 10 acres, rebuild Kamalistaan on the other 5, and sign Orion as a customer. Every figure is in ₹ crore, valued today.</p>
+</div>
+</header>
+
+<main>
+<div class="wrap grid">
+<aside class="card controls" aria-label="Simulator controls">
+<div>
+<h2>Your assumptions</h2>
+<div class="presets" role="group" aria-label="Scenarios">
+<button data-p="base" class="on">Base case</button>
+<button data-p="bear">Bear case</button>
+<button data-p="orion">Orion bull case</button>
+<button data-p="land">Land boom</button>
+</div>
+</div>
+
+<div class="group">
+<p class="gtitle">Our plan</p>
+<div class="ctl"><label for="kept">Acres kept <output id="o_kept"></output></label><input type="range" id="kept" min="2" max="15" step="1"><small>The rest are sold to a developer. Tech needs 3 acres, brand 2.</small></div>
+<div class="checks">
+<label><input type="checkbox" id="useTech"><span>Tech pivot: two LED volumes<small>₹350 Cr capex · ₹250 Cr revenue in year 5 at 40% margin</small></span></label>
+<label><input type="checkbox" id="useBrand"><span>Brand leverage: museum and IP licensing<small>₹120 Cr capex · ₹150 Cr revenue in year 5 at 45% margin</small></span></label>
+</div>
+<div class="ctl"><label for="deliv">Businesses deliver <output id="o_deliv"></output></label><input type="range" id="deliv" min="25" max="125" step="1"><small>Share of the Exhibit 2 plan actually achieved (applies to every pivot).</small></div>
+</div>
+
+<div class="group">
+<p class="gtitle">Land market</p>
+<div class="ctl"><label for="offer">Offer for all 15 acres <output id="o_offer"></output></label><input type="range" id="offer" min="1000" max="2000" step="25"><small>The case’s unsolicited offer is ₹1,500 Cr. Also sets the value of land kept.</small></div>
+<div class="ctl"><label for="ppa">Price per acre in a partial sale <output id="o_ppa"></output></label><input type="range" id="ppa" min="60" max="140" step="1"><small>Pro rata to the offer is ₹100 Cr. Smaller parcels may fetch less.</small></div>
+</div>
+
+<div class="group">
+<p class="gtitle">Orion’s offer</p>
+<div class="ctl"><label for="stock">Orion stock price move <output id="o_stock"></output></label><input type="range" id="stock" min="-60" max="60" step="5"><small>₹400 Cr of stock vests over 3 years; Orion’s stock is volatile.</small></div>
+<div class="ctl"><label for="pfull">Chance of the full ₹500 Cr earnout <output id="o_pfull"></output></label><input type="range" id="pfull" min="0" max="100" step="5"><small>Case analysts: 30%.</small></div>
+<div class="ctl"><label for="phalf">Further chance of half (₹250 Cr) <output id="o_phalf"></output></label><input type="range" id="phalf" min="0" max="100" step="5"><small>Case: 50% chance of at least half, so 20% more. Capped so the two add to 100% or less.</small></div>
+</div>
+
+<div class="group">
+<p class="gtitle">Valuation</p>
+<div class="ctl"><label for="rate">Discount rate <output id="o_rate"></output></label><input type="range" id="rate" min="8" max="18" step="0.5"></div>
+<div class="ctl"><label for="mult">Year-5 value of a business <output id="o_mult"></output></label><input type="range" id="mult" min="4" max="14" step="0.5"><small>Times its year-5 operating profit.</small></div>
+</div>
+</aside>
+
+<section class="results" aria-live="polite">
+<div class="verdict"><div><div class="tag">Verdict at these settings</div><div class="big" id="verdict"></div><div class="note" id="verdictNote"></div></div></div>
+<div class="warn" id="warn" hidden></div>
+
+<div class="card">
+<h2>Value to the family today, ₹ Cr</h2>
+<div class="bars" id="bars"></div>
+</div>
+
+<div class="kpis">
+<div class="kpi"><div class="k">Cash on day one</div><div class="v" id="k_cash"></div><div class="d">Our plan, after debt and capex</div></div>
+<div class="kpi"><div class="k">Year-5 profit</div><div class="v" id="k_y5"></div><div class="d">Our plan, ₹ Cr a year</div></div>
+<div class="kpi"><div class="k">Return on capital</div><div class="v" id="k_roc"></div><div class="d">Year-5 profit ÷ (land kept + capex)</div></div>
+<div class="kpi"><div class="k">Breakeven</div><div class="v" id="k_be"></div><div class="d" id="k_be_d">Delivery needed to beat a full sale</div></div>
+</div>
+
+<div class="card">
+<h2>How much has to go right?</h2>
+<p style="margin:2px 0 8px;color:var(--muted);font-size:14px">Value of our plan as the businesses deliver more or less of their plan, against the two exits.</p>
+<div class="chartwrap"><svg id="sens" viewBox="0 0 760 300" width="100%" role="img" aria-label="Line chart of our plan's value against business delivery, with the full sale and Orion as reference lines"></svg></div>
+<div class="legend"><span><i style="background:var(--maroon)"></i>Our plan</span><span><i style="background:var(--grey)"></i>Sell all 15 acres</span><span><i style="background:var(--gold)"></i>Orion, risk-adjusted</span></div>
+</div>
+
+<div class="split">
+<div class="card">
+<h2>Breakdown</h2>
+<table><thead><tr><th>Option</th><th class="n">Cash today</th><th class="n">Yr-5 profit</th><th class="n">Value</th></tr></thead><tbody id="tbl"></tbody></table>
+</div>
+<div class="card">
+<h2>Orion, unpacked</h2>
+<table><tbody id="orion"></tbody></table>
+<p style="font-size:13px;color:var(--muted);margin:10px 0 0">The family also gives up the land, the Kamalistaan brand, the 12 films and creative control.</p>
+</div>
+</div>
+</section>
+</div>
+</main>
+<footer>
+<p><b>Method.</b> Each option = cash received in years 0–5, discounted, plus what the family still owns at year 5 (businesses at the chosen multiple of year-5 operating profit; land kept at the offer’s per-acre value), discounted. Businesses ramp evenly to Exhibit 2’s year-5 revenue. ₹40 Cr of debt is repaid in every option. Orion stock vests evenly over years 1–3; the earnout is assumed to be paid around year 4. Pre-tax. Source: the case’s Exhibits 1–4 and Team Manthan’s model.</p>
+</footer>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const DEBT=40, ACRES=15;
+const PRESETS={
+ base:{kept:5,useTech:true,useBrand:true,deliv:100,offer:1500,ppa:100,stock:0,pfull:30,phalf:20,rate:12,mult:8},
+ bear:{kept:5,useTech:true,useBrand:true,deliv:60,offer:1500,ppa:80,stock:0,pfull:30,phalf:20,rate:12,mult:8},
+ orion:{kept:5,useTech:true,useBrand:true,deliv:100,offer:1500,ppa:100,stock:40,pfull:60,phalf:30,rate:12,mult:8},
+ land:{kept:5,useTech:true,useBrand:true,deliv:100,offer:1900,ppa:127,stock:0,pfull:30,phalf:20,rate:12,mult:8}
+};
+const ids=['kept','deliv','offer','ppa','stock','pfull','phalf','rate','mult'];
+function setPreset(p){const v=PRESETS[p];ids.forEach(k=>$(k).value=v[k]);$('useTech').checked=v.useTech;$('useBrand').checked=v.useBrand;
+ document.querySelectorAll('.presets button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));run();}
+const fmt=n=>Math.round(n).toLocaleString('en-IN');
+const sgn=n=>(n>=0?'+':'−')+fmt(Math.abs(n));
+function read(){const g=k=>parseFloat($(k).value);let pfull=g('pfull'),phalf=g('phalf');if(pfull+phalf>100){phalf=100-pfull;$('phalf').value=phalf;}
+ return {kept:g('kept'),useTech:$('useTech').checked,useBrand:$('useBrand').checked,deliv:g('deliv')/100,offer:g('offer'),ppa:g('ppa'),stock:g('stock')/100,pfull:pfull/100,phalf:phalf/100,r:g('rate')/100,mult:g('mult')};}
+function ramp(y5,m,f){const a=[];for(let k=1;k<=5;k++)a.push(y5*k/5*m*f);return a;}
+function model(s,fOverride){
+ const r=s.r,df=t=>Math.pow(1+r,t),pv=c=>c.reduce((a,x,i)=>a+x/df(i+1),0);
+ const f=fOverride===undefined?s.deliv:fOverride, landPA=s.offer/ACRES;
+ const tech=ramp(250,.40,f), brand=ramp(150,.45,f);
+ function keep(kept,capex,ops,salePA){const sale=(ACRES-kept)*salePA;const y5=ops[4]||0;const resid=(kept*landPA+s.mult*y5)/df(5);
+  return {value:sale-DEBT-capex+pv(ops)+resid,cash:sale-DEBT-capex,y5,roc:(kept*landPA+capex)>0?y5/(kept*landPA+capex):0};}
+ const p1={value:s.offer-DEBT,cash:s.offer-DEBT,y5:0};
+ const p2=keep(15,350,tech,landPA), p3=keep(15,120,brand,landPA);
+ const stockPV=[1,2,3].reduce((a,t)=>a+400/3/df(t),0)*(1+s.stock);
+ const earnEV=s.pfull*500+s.phalf*250, earnPV=earnEV/df(4);
+ const p4={value:1200-DEBT+stockPV+earnPV,cash:1200-DEBT,y5:0,stockPV,earnEV,earnPV};
+ let capex=0, ops=[0,0,0,0,0];
+ if(s.useTech){capex+=350;ops=ops.map((x,i)=>x+tech[i]);}
+ if(s.useBrand){capex+=120;ops=ops.map((x,i)=>x+brand[i]);}
+ const hy=keep(s.kept,capex,ops,s.ppa);
+ return {p1,p2,p3,p4,hy};
+}
+function breakeven(s,target){let lo=0,hi=3;if(model(s,hi).hy.value<target)return null;if(model(s,0).hy.value>=target)return 0;
+ for(let i=0;i<50;i++){const m=(lo+hi)/2;if(model(s,m).hy.value>=target)hi=m;else lo=m;}return hi;}
+function outs(s){$('o_kept').textContent=s.kept+' of 15 ('+(15-s.kept)+' sold)';$('o_deliv').textContent=Math.round(s.deliv*100)+'% of plan';
+ $('o_offer').textContent='₹'+fmt(s.offer)+' Cr';$('o_ppa').textContent='₹'+fmt(s.ppa)+' Cr';$('o_stock').textContent=(s.stock>0?'+':'')+Math.round(s.stock*100)+'%';
+ $('o_pfull').textContent=Math.round(s.pfull*100)+'%';$('o_phalf').textContent=Math.round(s.phalf*100)+'%';$('o_rate').textContent=(s.r*100).toFixed(1).replace('.0','')+'%';$('o_mult').textContent=s.mult+'×';}
+function run(){
+ const s=read();outs(s);const m=model(s);
+ const opts=[['Our plan','hy'],['Orion offer','p4'],['Sell all 15 acres','p1'],['Brand leverage, 15 acres','p3'],['Tech pivot, 15 acres','p2']].map(([n,k])=>({n,k,v:m[k].value}));
+ const max=Math.max(...opts.map(o=>o.v),1), win=opts.reduce((a,b)=>b.v>a.v?b:a);
+ $('bars').innerHTML=opts.map(o=>`<div class="bar${o===win?' win':''}"><span class="name">${o.n}${o===win?' · best':''}</span><div class="track"><div class="fill" style="width:${Math.max(2,o.v/max*100).toFixed(1)}%"></div></div><span class="val">${fmt(o.v)}</span></div>`).join('');
+ const second=opts.filter(o=>o!==win).reduce((a,b)=>b.v>a.v?b:a);
+ if(win.k==='hy'){$('verdict').textContent=`Our plan wins: ₹${fmt(win.v)} Cr, ₹${fmt(win.v-second.v)} Cr ahead of ${second.n.replace(', 15 acres','')}`;
+  $('verdictNote').textContent='And the family keeps the name, the films and '+s.kept+' acres of Kamalistaan.';}
+ else{$('verdict').textContent=`${win.n} leads at ₹${fmt(win.v)} Cr; our plan is ₹${fmt(win.v-m.hy.value)} Cr behind`;
+  $('verdictNote').textContent=win.k==='p1'||win.k==='p4'?'Our guardrail applies: if the businesses fall this short by year 3, sell the remaining acres.':'Keeping all 15 acres only wins if the land is worth far less than the offer.';}
+ const need=(s.useTech?3:0)+(s.useBrand?2:0);const w=[];
+ if(s.kept<need)w.push(`The chosen businesses need at least ${need} acres; you have kept ${s.kept}.`);
+ if(!s.useTech&&!s.useBrand)w.push('No business is selected, so the kept acres sit idle.');
+ $('warn').hidden=!w.length;$('warn').textContent=w.join(' ');
+ $('k_cash').textContent=sgn(m.hy.cash);$('k_y5').textContent=fmt(m.hy.y5);$('k_roc').textContent=(m.hy.roc*100).toFixed(1)+'%';
+ const b1=breakeven(s,m.p1.value), b4=breakeven(s,m.p4.value);
+ $('k_be').textContent=b1===null?'n/a':Math.round(b1*100)+'%';$('k_be_d').textContent='Delivery needed to beat a full sale'+(b4===null?'':'; '+Math.round(b4*100)+'% to beat Orion');
+ const rows=[['Our plan',m.hy],['Orion offer',m.p4],['Sell all 15 acres',m.p1],['Brand leverage, 15 acres',m.p3],['Tech pivot, 15 acres',m.p2]];
+ $('tbl').innerHTML=rows.map(([n,o])=>`<tr><td>${n}</td><td class="n">${sgn(o.cash)}</td><td class="n">${o.y5?fmt(o.y5):'–'}</td><td class="n"><b>${fmt(o.value)}</b></td></tr>`).join('');
+ $('orion').innerHTML=[['Headline value','2,100'],['Cash now, less ₹40 Cr debt',fmt(1160)],['Stock, value today',fmt(m.p4.stockPV)],['Earnout, expected',fmt(m.p4.earnEV)],['Earnout, value today',fmt(m.p4.earnPV)],['Risk-adjusted value','<b>'+fmt(m.p4.value)+'</b>']].map(([a,b])=>`<tr><td>${a}</td><td class="n">${b}</td></tr>`).join('');
+ drawSens(s,m);
+}
+function drawSens(s,m){
+ const W=760,H=300,L=64,R=20,T=18,B=46,xs=[];for(let f=0.25;f<=1.2501;f+=0.025)xs.push(f);
+ const ys=xs.map(f=>model(s,f).hy.value);const all=ys.concat([m.p1.value,m.p4.value]);
+ let lo=Math.min(...all),hi=Math.max(...all);const span=(hi-lo)*1.2||500;const step=[100,200,250,500,1000].find(x=>span/x<=6)||1000;lo=Math.floor((lo-(hi-lo)*0.08)/step)*step;hi=Math.ceil((hi+(hi-lo)*0.08)/step)*step;
+ const X=f=>L+(f-0.25)/1.0*(W-L-R),Y=v=>T+(hi-v)/(hi-lo)*(H-T-B);
+ let g='';for(let v=lo;v<=hi+0.1;v+=step){g+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#E2D6C0"/><text x="${L-8}" y="${Y(v)+4}" text-anchor="end" font-size="12" fill="#57504A">${fmt(v)}</text>`;}
+ [0.25,0.5,0.75,1,1.25].forEach(f=>{g+=`<text x="${X(f)}" y="${H-B+20}" text-anchor="middle" font-size="12" fill="#57504A">${Math.round(f*100)}%</text>`;});
+ g+=`<text x="${(L+W-R)/2}" y="${H-6}" text-anchor="middle" font-size="12.5" fill="#57504A" font-weight="600">Businesses deliver, % of plan</text>`;
+ g+=`<line x1="${L}" x2="${W-R}" y1="${Y(m.p1.value)}" y2="${Y(m.p1.value)}" stroke="#9C8F7E" stroke-width="2" stroke-dasharray="6 5"/>`;
+ g+=`<line x1="${L}" x2="${W-R}" y1="${Y(m.p4.value)}" y2="${Y(m.p4.value)}" stroke="#D9A54A" stroke-width="2.5" stroke-dasharray="6 5"/>`;
+ g+=`<polyline fill="none" stroke="#7B1E2C" stroke-width="3.5" points="${xs.map((f,i)=>X(f).toFixed(1)+','+Y(ys[i]).toFixed(1)).join(' ')}"/>`;
+ const cf=Math.min(1.25,Math.max(0.25,s.deliv)),cv=model(s,cf).hy.value;
+ g+=`<line x1="${X(cf)}" x2="${X(cf)}" y1="${T}" y2="${H-B}" stroke="#1D1A21" stroke-width="1" stroke-dasharray="3 4"/><circle cx="${X(cf)}" cy="${Y(cv)}" r="7" fill="#7B1E2C" stroke="#F6F1E7" stroke-width="2.5"/>`;
+ const lx=X(cf)>W-200?X(cf)-10:X(cf)+10,anc=X(cf)>W-200?'end':'start';
+ g+=`<text x="${lx}" y="${Y(cv)-12}" text-anchor="${anc}" font-size="13" font-weight="700" fill="#7B1E2C">You: ${fmt(cv)}</text>`;
+ $('sens').innerHTML=g;
+}
+// header LED pixels
+(function(){let h='';let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+ for(let x=0;x<400;x+=12)for(let y=0;y<300;y+=12){const t=x/400;const o=(0.04+0.55*t*rnd()).toFixed(2);h+=`<rect x="${x}" y="${y}" width="9" height="9" rx="1.5" fill="#D9A54A" fill-opacity="${o}"/>`;}
+ $('pix').innerHTML=h;})();
+document.querySelectorAll('.presets button').forEach(b=>b.addEventListener('click',()=>setPreset(b.dataset.p)));
+ids.forEach(k=>$(k).addEventListener('input',()=>{document.querySelectorAll('.presets button').forEach(b=>b.classList.remove('on'));run();}));
+['useTech','useBrand'].forEach(k=>$(k).addEventListener('change',()=>{document.querySelectorAll('.presets button').forEach(b=>b.classList.remove('on'));run();}));
+setPreset('base');
+})();
+</script>
+</body>
+</html>
